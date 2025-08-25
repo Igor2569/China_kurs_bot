@@ -2,6 +2,18 @@ from aiogram import types
 from loader import dp,bot
 from data import config
 import utils
+import os
+
+def read_file(filename, default_text="Информация пока не добавлена администратором."):
+    try:
+        if os.path.exists(filename):
+            with open(filename, 'r', encoding='utf-8') as file:
+                content = file.read().strip()
+                return content if content else default_text
+    except Exception as e:
+        print(f"Error reading {filename}: {e}")
+    return default_text
+
 @dp.message_handler(lambda message:message.text=='Курс')
 async def GetKurs(message:types.Message):
         f = open('data/textes/kurs.txt','r')
@@ -61,3 +73,28 @@ async def start_order(message: types.Message):
     await message.answer("👕 Введите название товара (например: 'Кроссовки Nike Air Force'):", 
                          reply_markup=types.ReplyKeyboardRemove())
 
+
+@dp.message_handler(lambda message: message.text == 'Гайды')
+async def send_guides(message: types.Message):
+    guides_text = read_file('data/textes/guides.txt', 'Гайды пока не добавлены.')
+    await message.answer(f"📚 Гайды:\n{guides_text}")
+
+@dp.message_handler(lambda message: message.text == 'Частые вопросы')
+async def send_questions(message: types.Message):
+    questions_text = read_file('data/textes/questions.txt', 'Частые вопросы пока не добавлены.')
+    await message.answer(f"❓ Частые вопросы:\n{questions_text}")
+
+@dp.message_handler(lambda message: message.text == 'Отзывы')
+async def send_reviews(message: types.Message):
+    reviews_text = read_file('data/textes/reviews.txt', 'Отзывы пока не добавлены.')
+    await message.answer(f"⭐ Отзывы:\n{reviews_text}")
+
+@dp.message_handler(lambda message: message.text == 'Амбассадорство')
+async def send_ambassador(message: types.Message):
+    ambassador_text = read_file('data/textes/ambassador.txt', 'Информация об амбассадорстве пока не добавлена.')
+    await message.answer(f"🌟 Амбассадорство:\n{ambassador_text}")
+
+@dp.message_handler(lambda message: message.text == 'Текущий курс юаня')
+async def send_kurs(message: types.Message):
+    kurs_text = read_file('kurs.txt', 'Курс юаня пока не установлен.')
+    await message.answer(f"💰 Текущий курс юаня:\n{kurs_text}")

@@ -10,7 +10,7 @@ def save_to_file(filename, text):
 
 @dp.message_handler(state = utils.get_kurs.kurs)
 async def Kurs(message:types.Message,state:FSMContext):
-    f = open('data/textes/kurs.txt','w')
+    f = open('data/textes/kurs.txt','w',encoding='utf-8')
     f.write(message.text)
     f.close()
     await bot.send_message(chat_id=message.from_user.id,
@@ -19,13 +19,13 @@ async def Kurs(message:types.Message,state:FSMContext):
 
 @dp.message_handler(state=utils.Settings.start_text)
 async def process_start_text(message: types.Message, state: FSMContext):
-    save_to_file('start_text.txt', message.text)
+    save_to_file('data/textes/start_text.txt', message.text)
     await message.answer("Стартовый текст успешно изменен!")
     await state.finish()
 
 @dp.message_handler(state=utils.Settings.guides)
 async def process_guides(message: types.Message, state: FSMContext):
-    save_to_file('guides.txt', message.text)
+    save_to_file('data/textes/guides.txt', message.text)
     await message.answer("Текст гайдов успешно изменен!")
     await state.finish()
 
